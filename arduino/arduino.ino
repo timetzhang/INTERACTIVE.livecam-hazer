@@ -1,5 +1,5 @@
-int hazerOn = 8;
-int hazerOff = 9;
+int hazerOn = 9;
+int hazerOff = 8;
 bool isHazable = true;
 bool hazerStatus = false;
 long curTime;
@@ -22,22 +22,25 @@ void loop() {
   if (Serial.available()) {
     int value = Serial.read();
     if (value == 49 && isHazable) {
-      hazerStatus = true;
       isHazable = false;
+      hazerStatus = true;
       curTime = millis();
       digitalWrite(hazerOn, HIGH);
-      delay(100);
-      //Serial.println("hazering");
+      delay(200);
+      Serial.println("hazering");
       digitalWrite(hazerOn, LOW);
     }
   }
   if (millis() - curTime > 10000 && isHazable == false) {
     isHazable = true;
   }
-  if (millis() - curTime > 2000 && hazerStatus == true) {
+  if (millis() - curTime > 2000 && hazerStatus) {
     hazerStatus = false;
     digitalWrite(hazerOff, HIGH);
-    //Serial.println("hazer end");
+    Serial.println("hazer end");
+    delay(100);
+    digitalWrite(hazerOff, LOW);
+    digitalWrite(hazerOff, HIGH);
     delay(100);
     digitalWrite(hazerOff, LOW);
   }
